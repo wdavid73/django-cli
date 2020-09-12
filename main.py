@@ -20,25 +20,27 @@ def make_view(name, name_app):
         try:
             # Create target Directory
             os.mkdir(path+dirName)
-            #print("Directory ", dirName,  " Created ")
+            # print("Directory ", dirName,  " Created ")
             f = open(path+dirName+"/"+name+".py", "w+")
             f.write(
-                'from django.shortcuts import render, redirect, get_object_or_404\n\n'
-                'from ..models import #your model\n\n'
+                'from django.http import HttpResponse\n\n'
                 '#First View\n'
-                'def List'+name+'(request):\n'
+                'def index(request):\n'
                 '   #Your Code Here..'
+                '   return HttpResponse("Hello, world. You are at the ' +
+                name+' index.")'
             )
             f.close()
         except FileExistsError:
-            #print("Directory ", dirName,  " already exists")
+            # print("Directory ", dirName,  " already exists")
             f = open(path+dirName+"/"+name+".py", "w+")
             f.write(
-                'from django.shortcuts import render, redirect, get_object_or_404\n\n'
-                'from ..models import #your model\n\n'
+                'from django.http import HttpResponse\n\n'
                 '#First View\n'
-                'def List'+name+'(request):\n'
-                '   #Your Code Here..'
+                'def index(request):\n'
+                '   #Your Code Here..\n'
+                '   return HttpResponse("Hello, world. You are at the ' +
+                name+' index.")'
             )
             f.close()
         print(f"View Created.")
@@ -46,29 +48,29 @@ def make_view(name, name_app):
         print(f"Don't Find a App of Django with this name {name_app}")
 
 
-@main.command()
-@click.option("--name", prompt="Name of template", help="name of the template to create")
+@ main.command()
+@ click.option("--name", prompt="Name of template", help="name of the template to create")
 def make_template(name):
     print("Creating template...")
     print(f"make template {name}")
 
 
-@main.command()
-@click.option("--name", prompt="Name of serializer", help="name of serializer to create")
+@ main.command()
+@ click.option("--name", prompt="Name of serializer", help="name of serializer to create")
 def make_serializer(name):
     print("Creating serializer...")
     print(f"make serializer {name}")
 
 
-@main.command()
-@click.option("--name", prompt="Name of model", help="name of model to create")
+@ main.command()
+@ click.option("--name", prompt="Name of model", help="name of model to create")
 def make_model(name):
     print("Creating model...")
     print(f"make model {name}")
 
 
-@main.command()
-@click.option("--name", prompt="Name of Module of Endpoint", help="Name of enpoint to create")
+@ main.command()
+@ click.option("--name", prompt="Name of Module of Endpoint", help="Name of enpoint to create")
 def make_endpoint(name):
     print("Creating Endpoint...")
     print("make endpoint {name}")

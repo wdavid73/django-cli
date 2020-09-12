@@ -1,6 +1,6 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
 
-from ..models import #your model
-
-def Listclient(request):
-    #Your Code Here..
+#First View
+def index(request):
+   #Your Code Here..
+   return HttpResponse("Hello, world. You are at the client index.")

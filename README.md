@@ -9,6 +9,10 @@ Este en un pequeño proyecto creado con el proposito inicial de facilitar median
 1. python 3.8+
 2. librari click
 
+## COMANDOS
+
+1. python main.py make-view
+
 ### NOTA
 
 La carpeta myapp es solo un ejemplo para ver como funciona los comandos usando esta carpeta como un suspuesto proyecto base creado por django pero sin todos los archivos que corresponde a este solo con la una pequeña estructura de sus carpetas

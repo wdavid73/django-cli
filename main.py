@@ -2,6 +2,33 @@ import os
 import click
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
+contentView = '''from django.http import HttpResponse\n
+#First View
+def index(request):
+    #Your Code Here..
+    return HttpResponse("Hello, world!!. You are at the {} index.")
+'''
+
+contentTemplate = '''{% extends "dir_of_yout_layout" %}
+{% load staticfiles %}\n
+{% block title %}
+Title of you Template 
+{% endblock %}
+{% block content %}
+<div>
+    Your content HTML here for you Template
+</div>
+{% endblock %}
+'''
+
+contentSerializer = '''from rest_framework import serializers
+from {}.models import {}\n
+class {}Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = {}
+        fields = ['id', '....']
+'''
+
 
 @click.group()
 def main():
@@ -13,32 +40,11 @@ def main():
 @click.option("--name_app", prompt="Name of your App of Django", default="myapp")
 def make_view(name, name_app):
     if os.path.isdir(name_app):
-        path = dir_path + '/' + name_app + "/"
-        dirTempalte = path + "views"
+        dirViews = dir_path + '/' + name_app + "/" + "views"
         try:
-            os.mkdir(dirTempalte)
+            os.mkdir(dirViews)
         except FileExistsError:
-            if not os.path.isfile(dirTempalte+"/"+name+".py"):
-                try:
-                    print("Creating View File...")
-                    f = open(dirTempalte+"/"+name+".py", "w+")
-                    f.write(
-                        'from django.http import HttpResponse\n\n'
-                        '#First View\n'
-                        'def index(request):\n'
-                        '   #Your Code Here..\n'
-                        '   return HttpResponse("Hello, world!!. You are at the ' +
-                        name+' index.")'
-                    )
-                    f.close()
-                    print(f"View Created.")
-                except IOError:
-                    print("File not accessible")
-                finally:
-                    f.close()
-            else:
-                print(f"A file with that name already exists")
-
+            MakeFile(dirViews, name, ".py", contentView.format(name))
     else:
         print(f"Don't Find a App of Django with this name : {name_app}")
 
@@ -48,45 +54,37 @@ def make_view(name, name_app):
 @click.option("--name_app", prompt="Name of your App of Django", default="myapp")
 def make_template(name, name_app):
     if os.path.isdir(name_app):
-        path = dir_path + '/' + name_app + "/"
-        dirTempalte = path + "template"
+        dirTemplates = dir_path + '/' + name_app + "/" + "template"
         try:
-            os.mkdir(dirTempalte)
+            os.mkdir(dirTemplates)
         except FileExistsError:
-            if not os.path.isfile(dirTempalte+"/"+name+".html"):
-                try:
-                    print("Creating View File...")
-                    f = open(dirTempalte+"/"+name+".html", "w+")
-                    f.write(
-                        '{% extends "dir_of_yout_layout" %}\n'
-                        '{% load staticfiles %}\n\n'
-                        '{% block title %} ' +
-                        name.upper()
-                        + ' Template {% endblock %}\n'
-                        '{% block content %}\n'
-                        '<div>\n'
-                        'Your content HTML here for you Template '+name+'\n'
-                        '</div>\n'
-                        '{% endblock %}'
-                    )
-                    f.close()
-                    print(f"View Created.")
-                except IOError:
-                    print("File not accessible")
-                finally:
-                    f.close()
-            else:
-                print(f"A file with that name already exists")
-
+            MakeFile(dirTemplates, name, ".html", contentTemplate)
     else:
         print(f"Don't Find a App of Django with this name : {name_app}")
 
 
 @ main.command()
 @ click.option("--name", prompt="Name of serializer", help="name of serializer to create")
-def make_serializer(name):
-    print("Creating serializer...")
-    print(f"make serializer {name}")
+@ click.option("--name_app", prompt="Name of your App of Django", default="myapp")
+@ click.option("--name_model", prompt="Name of Model for the Serializer", default="my_model")
+def make_serializer(name, name_app, name_model):
+
+    if os.path.isdir(name_app):
+        dirSerializers = dir_path + '/' + name_app + "/" + "serializers"
+        try:
+            os.mkdir(dirSerializers)
+        except FileExistsError:
+            MakeFile(dirSerializers,
+                     name,
+                     ".py",
+                     contentSerializer.format(name_app,
+                                              name_model.capitalize(),
+                                              name.capitalize(),
+                                              name_model.capitalize()
+                                              )
+                     )
+    else:
+        print(f"Don't Find a App of Django with this name : {name_app}")
 
 
 @ main.command()
@@ -112,6 +110,22 @@ def hello(count, name):
     Simple program that greets NAME for a total of COUNT times.
     for _ in range(count):
         click.echo(f"Hello, {name}!") """
+
+
+def MakeFile(dir, nameFile, ext, content):
+    if not os.path.isfile(dir + "/" + nameFile + ext):
+        try:
+            print("Creating File...")
+            f = open(dir + "/" + nameFile + ext, "w+")
+            f.write(content)
+            f.close()
+            print(f"File Created.")
+        except IOError:
+            print("File not accessible")
+        finally:
+            f.close()
+    else:
+        print(f"A file with that name already exists")
 
 
 if __name__ == '__main__':

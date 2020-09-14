@@ -1,17 +1,33 @@
+"""usage: main.py [-h]
+optional arguments:
+    -h, --help  show this help message and exit
+
+commands:
+    make-view
+    make-model
+    make-serializer
+    make-template
+    make_endpoint
+"""
+
 import os
 import click
+import enquiries
+from pyfiglet import Figlet
+
 from contents import contentView, contentTemplate, contentSerializer, contentModel
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
 @click.group()
 def main():
-    print(f"Welcome to my Django-Cli")
+    f = Figlet(font='slant')
+    print(f.renderText('Django-CLI'))
 
 
 @main.command()
-@click.option("--name", prompt="Name of View", help="name of the view to create")
-@click.option("--name_app", prompt="Name of your App of Django", default="myapp")
+@click.option("--name", prompt="✨ Name of View", help="name of the view to create")
+@click.option("--name_app", prompt="✨ Name of your App of Django", default="myapp")
 def make_view(name, name_app):
     if os.path.isdir(name_app):
         dirViews = dir_path + '/' + name_app + "/" + "views"
@@ -21,12 +37,14 @@ def make_view(name, name_app):
         except FileExistsError:
             MakeFile(dirViews, name, ".py", contentView.format(name))
     else:
-        print(f"Don't Find a App of Django with this name : {name_app}")
+        click.echo(
+            "Don't Find a App of Django with this name : {}".format(name_app)
+        )
 
 
 @ main.command()
-@ click.option("--name", prompt="Name of template", help="name of the template to create")
-@click.option("--name_app", prompt="Name of your App of Django", default="myapp")
+@ click.option("--name", prompt="✨ Name of template", help="name of the template to create")
+@click.option("--name_app", prompt="✨ Name of your App of Django", default="myapp")
 def make_template(name, name_app):
     if os.path.isdir(name_app):
         dirTemplates = dir_path + '/' + name_app + "/" + "template"
@@ -36,13 +54,15 @@ def make_template(name, name_app):
         except FileExistsError:
             MakeFile(dirTemplates, name, ".html", contentTemplate)
     else:
-        print(f"Don't Find a App of Django with this name : {name_app}")
+        click.echo(
+            "Don't Find a App of Django with this name : {}".format(name_app)
+        )
 
 
 @ main.command()
-@ click.option("--name", prompt="Name of serializer", help="name of serializer to create")
-@ click.option("--name_app", prompt="Name of your App of Django", default="myapp")
-@ click.option("--name_model", prompt="Name of Model for the Serializer", default="my_model")
+@ click.option("--name", prompt="✨ Name of serializer", help="name of serializer to create")
+@ click.option("--name_app", prompt="✨ Name of your App of Django", default="myapp")
+@ click.option("--name_model", prompt="✨ Name of Model for the Serializer", default="my_model")
 def make_serializer(name, name_app, name_model):
 
     if os.path.isdir(name_app):
@@ -69,12 +89,14 @@ def make_serializer(name, name_app, name_model):
                                               )
                      )
     else:
-        print(f"Don't Find a App of Django with this name : {name_app}")
+        click.echo(
+            "Don't Find a App of Django with this name : {}".format(name_app)
+        )
 
 
 @ main.command()
-@ click.option("--name", prompt="Name of model", help="name of model to create")
-@ click.option("--name_app", prompt="Name of your App of Django", default="myapp")
+@ click.option("--name", prompt="✨ Name of model", help="name of model to create")
+@ click.option("--name_app", prompt="✨ Name of your App of Django", default="myapp")
 def make_model(name, name_app):
     if os.path.isdir(name_app):
         dirModels = dir_path + '/' + name_app + "/" + "models"
@@ -86,29 +108,35 @@ def make_model(name, name_app):
             MakeFile(dirModels, name, ".py",
                      contentModel.format(name.capitalize(), name.capitalize()))
     else:
-        print(f"Don't Find a App of Django with this name : {name_app}")
+        click.echo(
+            "Don't Find a App of Django with this name : {}".format(name_app)
+        )
 
 
 @ main.command()
-@ click.option("--name", prompt="Name of Module of Endpoint", help="Name of enpoint to create")
+@ click.option("--name", prompt="✨ Name of Module of Endpoint", help="Name of enpoint to create")
 def make_endpoint(name):
-    print("Working Progress")
+    click.echo("Working Progress")
+    # ESTRUCTURA DE CARPETAS
+    options = ['Do Something 1', 'Do Something 2', 'Do Something 3']
+    choice = enquiries.choose('Choose one of these options: ', options)
+    print(choice)
 
 
 def MakeFile(dir, nameFile, ext, content):
     if not os.path.isfile(dir + "/" + nameFile + ext):
         try:
-            print("Creating File...")
+            click.echo("Creating File...")
             f = open(dir + "/" + nameFile + ext, "w+")
             f.write(content)
             f.close()
-            print(f"File Created.")
+            click.echo(f"File Created.")
         except IOError:
-            print("File not accessible")
+            click.echo("File not accessible")
         finally:
             f.close()
     else:
-        print(f"A file with that name already exists")
+        click.echo("A file with that name already exists")
 
 
 if __name__ == '__main__':

@@ -17,11 +17,11 @@ before using any command in the package first go to your django project folder
 
 ## Commands local
 
-1. python main.py make-view
-2. python main.py make-template
-3. python main.py make-model
-4. python main.py make-serializer
-5. python main.py make-endpoint (working progress)
+1. python cli/main.py make-view
+2. python cli/main.py make-template
+3. python cli/main.py make-model
+4. python cli/main.py make-serializer
+5. python cli/main.py make-endpoint (working progress)
 
 ## Commands
 

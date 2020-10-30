@@ -29,8 +29,4 @@ before using any command in the package first go to your django project folder
 2. django-cli make-template
 3. django-cli make-model
 4. django-cli make-serializer
-5. django-cli make-endpoint (working progress)
-
-### Note
-
-The myapp folder is just an example to see how the commands work using this folder as a base project created by django but without all the files that correspond to it, only with a small structure of its folders
+5. django-cli make-endpoint

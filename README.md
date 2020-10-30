@@ -2,7 +2,7 @@
 
 ## Description
 
-This is a small project created with the initial purpose of facilitating, through a single command, the creation of views (views), templates (templates), models (models) and serializers (serializers) for the django web framework.
+This is a small project created with the initial purpose of facilitating, through a single command, the creation of views, templates, models, serializers and basic endpoints for the django web framework together with the django rest framework.
 You can use
 [Django-Cli](https://github.com/wdavid73/django-cli)
 [Django-Cli in PyPi](https://pypi.org/project/django-cli-g73/#description)

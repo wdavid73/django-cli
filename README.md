@@ -10,10 +10,16 @@ You can use
 ## Requirements
 
 1. python 3.7+
+2. Libray CLick
 
 ## Usage
 
 before using any command in the package first go to your django project folder
+
+## Install Manually
+
+git clone <https://github.com/wdavid73/django-cli>
+python setup.py
 
 ## Commands local
 

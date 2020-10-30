@@ -287,31 +287,45 @@ def MakeStrucutreFolderModule(choice: List, dir: str,
         if folder == "View":
             try:
                 os.mkdir(dir + "/" + folder)
-                MakeFileInFolderView(dir , folder_domain,folder_infractructure, folder , name_file_view,name_file_model,name,name_file_serializer,name_serializer)
+                MakeFileInFolderView(dir, folder_model, folder_serializer,
+                                     folder, name_file_view,
+                                     name_file_model, name,
+                                     name_file_serializer, name_serializer)
             except FileExistsError:
-                MakeFileInFolderView(dir , folder_domain,folder_infractructure, folder , name_file_view,name_file_model,name,name_file_serializer,name_serializer)
+                MakeFileInFolderView(dir, folder_model, folder_serializer,
+                                     folder, name_file_view,
+                                     name_file_model, name,
+                                     name_file_serializer, name_serializer)
         if folder == "Model":
             try:
                 os.mkdir(dir + "/" + folder)
-                MakeFileInFolderModel(dir , folder , name_file_model , name)
+                MakeFileInFolderModel(dir, folder, name_file_model, name)
             except FileExistsError:
-                MakeFileInFolderModel(dir , folder , name_file_model , name)
+                MakeFileInFolderModel(dir, folder, name_file_model, name)
         if folder == "Serializer":
             try:
                 os.mkdir(dir + "/" + folder)
-                MakeFileInFolderSerializer(dir, folder_domain,folder,name_file_serializer,name_file_model,name,name_serializer)
+                MakeFileInFolderSerializer(dir, folder_model, folder,
+                                           name_file_serializer,
+                                           name_file_model, name,
+                                           name_serializer)
             except FileExistsError:
-                MakeFileInFolderSerializer(dir, folder_domain,folder,name_file_serializer,name_file_model,name,name_serializer)
+                MakeFileInFolderSerializer(dir, folder_model, folder,
+                                           name_file_serializer,
+                                           name_file_model, name,
+                                           name_serializer)
         if folder == "Application":
             try:
                 os.mkdir(dir + "/" + folder)
-                MakeFileInFolderApplication(dir, folder_domain, folder_infractructure,
+                MakeFileInFolderApplication(dir, folder_domain,
+                                            folder_infractructure,
                                             folder, name_file_view,
                                             name_file_model,
                                             name, name_file_serializer,
                                             name_serializer)
             except FileExistsError:
-                MakeFileInFolderApplication(dir, folder_domain, folder_infractructure,
+                MakeFileInFolderApplication(dir, folder_domain,
+                                            folder_infractructure,
                                             folder, name_file_view,
                                             name_file_model,
                                             name, name_file_serializer,
@@ -325,30 +339,37 @@ def MakeStrucutreFolderModule(choice: List, dir: str,
         if folder == "Infractructure":
             try:
                 os.mkdir(dir + "/" + folder)
-                MakeFileInFolderInfractructure(dir,folder_domain,folder,name_file_serializer,name_file_model,name,name_serializer)
+                MakeFileInFolderInfractructure(dir, folder_domain,
+                                               folder, name_file_serializer,
+                                               name_file_model, name,
+                                               name_serializer)
             except FileExistsError:
-                MakeFileInFolderInfractructure(dir,folder_domain,folder,name_file_serializer,name_file_model,name,name_serializer)
+                MakeFileInFolderInfractructure(dir, folder_domain,
+                                               folder, name_file_serializer,
+                                               name_file_model, name,
+                                               name_serializer)
     click.echo("Please Created inside of module the File for URLS")
 
 
-def MakeFileInFolderApplication(dir: str, folder_domain: str, folder_infractructure: str,
+def MakeFileInFolderApplication(dir: str, folder_domain: str,
+                                folder_infractructure: str,
                                 folder: str, name_file_view: str,
                                 name_file_model: str, name: str,
                                 name_file_serializer: str,
                                 name_serializer: str):
     MakeFile(dir + "/" + folder, name_file_view, ".py",
              contentClassAPiView.format(folder_domain,
-                 name_file_model,
-                                           name.capitalize(),  # name of model
-                                           folder_infractructure,
-                                           name_file_serializer,
-                                           name_serializer,
-                                           name + "s",
-                                           name.capitalize(),  # name of model
-                                           name_serializer,
-                                           name + "s",
-                                           name_serializer,
-                                           )
+                                        name_file_model,
+                                        name.capitalize(),  # name of model
+                                        folder_infractructure,
+                                        name_file_serializer,
+                                        name_serializer,
+                                        name + "s",
+                                        name.capitalize(),  # name of model
+                                        name_serializer,
+                                        name + "s",
+                                        name_serializer,
+                                        )
              )
 
 
@@ -363,43 +384,43 @@ def MakeFileInFolderDomain(dir: str, folder: str,
              )
 
 
-def MakeFileInFolderInfractructure(dir: str, folder_domain: str,folder: str,
+def MakeFileInFolderInfractructure(dir: str, folder_domain: str, folder: str,
                                    name_file_serializer: str,
                                    name_file_model: str, name: str,
                                    name_serializer: str):
     MakeFile(dir + "/" + folder, name_file_serializer, ".py",
              contentClassAPISerializer.format(folder_domain,
-                 name_file_model,
-                 name.capitalize(),
-                 name_serializer,
-                 name.capitalize(),
-                 )
+                                              name_file_model,
+                                              name.capitalize(),
+                                              name_serializer,
+                                              name.capitalize(),
+                                              )
              )
 
 
-def MakeFileInFolderView(dir: str,folder_domain: str, folder_infractructure: str,
+def MakeFileInFolderView(dir: str, folder_model: str, folder_serializer: str,
                          folder: str, name_file_view: str,
-                                name_file_model: str, name: str,
-                                name_file_serializer: str,
-                                name_serializer: str):
+                         name_file_model: str, name: str,
+                         name_file_serializer: str,
+                         name_serializer: str):
     MakeFile(dir + "/" + folder, name_file_view, ".py",
-             contentClassAPiView.format(folder_domain,
-                 name_file_model,
-                                           name.capitalize(),  # name of model
-                                           folder_infractructure,
-                                           name_file_serializer,
-                                           name_serializer,
-                                           name + "s",
-                                           name.capitalize(),  # name of model
-                                           name_serializer,
-                                           name + "s",
-                                           name_serializer,
-                                           )
+             contentClassAPiView.format(folder_model,
+                                        name_file_model,
+                                        name.capitalize(),  # name of model
+                                        folder_serializer,
+                                        name_file_serializer,
+                                        name_serializer,
+                                        name + "s",
+                                        name.capitalize(),  # name of model
+                                        name_serializer,
+                                        name + "s",
+                                        name_serializer,
+                                        )
              )
 
 
 def MakeFileInFolderModel(dir: str, folder: str,
-                           name_file_model: str, name: str):
+                          name_file_model: str, name: str):
     MakeFile(dir + "/" + folder, name_file_model, ".py",
              contentClassAPiModel.format(
                      name.capitalize(),
@@ -409,17 +430,17 @@ def MakeFileInFolderModel(dir: str, folder: str,
              )
 
 
-def MakeFileInFolderSerializer(dir: str, folder_domain: str,folder: str,
-                                   name_file_serializer: str,
-                                   name_file_model: str, name: str,
-                                   name_serializer: str):
+def MakeFileInFolderSerializer(dir: str, folder_model: str, folder: str,
+                               name_file_serializer: str,
+                               name_file_model: str, name: str,
+                               name_serializer: str):
     MakeFile(dir + "/" + folder, name_file_serializer, ".py",
-             contentClassAPISerializer.format(folder_domain,
-                 name_file_model,
-                 name.capitalize(),
-                 name_serializer,
-                 name.capitalize(),
-                 )
+             contentClassAPISerializer.format(folder_model,
+                                              name_file_model,
+                                              name.capitalize(),
+                                              name_serializer,
+                                              name.capitalize(),
+                                              )
              )
 
 

@@ -26,13 +26,13 @@ def index(request):
     return HttpResponse("Hello, world!!. You are at the {} index.")
 '''
 
-contentClassAPiViewADI = '''from rest_framework import status
+contentClassAPiView = '''from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from ..Domain.{} import {}
-from ..Infractructure.{} import {}
+from ..{}.{} import {}
+from ..{}.{} import {}
 
 class GetAndPost(APIView):
 
@@ -52,7 +52,7 @@ class GetAndPost(APIView):
 
 '''
 
-contentClassAPiModelADI = '''from django.db import models
+contentClassAPiModel = '''from django.db import models
 from django.urls import reverse
 
 
@@ -68,21 +68,20 @@ class {}(models.Model):
         db_table = "{}"
 '''
 
-contentClassAPISerializerADI = '''from rest_framework import serializers
-from ..Domain.{} import {}
+contentClassAPISerializer = '''from rest_framework import serializers
+from ..{}.{} import {}
 
 class {}(serializers.ModelSerializer):
 
     class Meta:
         model = {}
         fields = '__all__'
-        
 '''
 
 contentTemplate = '''{% extends "dir_of_yout_layout" %}
 {% load staticfiles %}\n
 {% block title %}
-Title of you Template 
+Title of you Template
 {% endblock %}
 {% block content %}
 <div>
@@ -106,8 +105,7 @@ class {}(models.Model):
     number = models.IntegerField(null=True)
     state = models.SmallIntegerField(default=1, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True) 
-    
+    updated_at = models.DateTimeField(auto_now=True)
     class Meta:
         db_table = "{}"
 '''
@@ -120,8 +118,12 @@ def main():
 
 
 @main.command()
-@click.option("--name", prompt="✨ Name of View", help="name of the view to create")
-@click.option("--name_app", prompt="✨ Name of your App of Django", default="myapp")
+@click.option("--name",
+              prompt="✨ Name of View",
+              help="name of the view to create")
+@click.option("--name_app",
+              prompt="✨ Name of your App of Django",
+              default="myapp")
 def make_view(name, name_app):
     if os.path.isdir(name_app):
         dirViews = dir_path + '/' + name_app + "/" + "views"
@@ -137,8 +139,12 @@ def make_view(name, name_app):
 
 
 @ main.command()
-@ click.option("--name", prompt="✨ Name of template", help="name of the template to create")
-@click.option("--name_app", prompt="✨ Name of your App of Django", default="myapp")
+@ click.option("--name",
+               prompt="✨ Name of template",
+               help="name of the template to create")
+@click.option("--name_app",
+              prompt="✨ Name of your App of Django",
+              default="myapp")
 def make_template(name, name_app):
     if os.path.isdir(name_app):
         dirTemplates = dir_path + '/' + name_app + "/" + "template"
@@ -154,9 +160,15 @@ def make_template(name, name_app):
 
 
 @ main.command()
-@ click.option("--name", prompt="✨ Name of serializer", help="name of serializer to create")
-@ click.option("--name_app", prompt="✨ Name of your App of Django", default="myapp")
-@ click.option("--name_model", prompt="✨ Name of Model for the Serializer", default="my_model")
+@ click.option("--name",
+               prompt="✨ Name of serializer",
+               help="name of serializer to create")
+@ click.option("--name_app",
+               prompt="✨ Name of your App of Django",
+               default="myapp")
+@ click.option("--name_model",
+               prompt="✨ Name of Model for the Serializer",
+               default="my_model")
 def make_serializer(name, name_app, name_model):
 
     if os.path.isdir(name_app):
@@ -189,8 +201,10 @@ def make_serializer(name, name_app, name_model):
 
 
 @ main.command()
-@ click.option("--name", prompt="✨ Name of model", help="name of model to create")
-@ click.option("--name_app", prompt="✨ Name of your App of Django", default="myapp")
+@ click.option("--name",
+               prompt="✨ Name of model", help="name of model to create")
+@ click.option("--name_app",
+               prompt="✨ Name of your App of Django", default="myapp")
 def make_model(name, name_app):
     if os.path.isdir(name_app):
         dirModels = dir_path + '/' + name_app + "/" + "models"
@@ -208,25 +222,35 @@ def make_model(name, name_app):
 
 
 @ main.command()
-@ click.option("--name", prompt="✨ Name of Module of Endpoint", help="Name of enpoint to create")
-@ click.option("--name_app", prompt="✨ Name of your App of Django", default="myapp")
-def make_endpoint(name,name_app):
+@ click.option("--name",
+               prompt="✨ Name of Module of Endpoint",
+               help="Name of enpoint to create")
+@ click.option("--name_app",
+               prompt="✨ Name of your App of Django", default="myapp")
+def make_endpoint(name, name_app):
     if os.path.isdir(name_app):
         dirModule = dir_path + '/' + name_app + "/" + name.capitalize()
-        structureOne = 'Application/Domain/Infractruture'
+        structureOne = 'Application/Domain/Infractructure'
         structureTwo = 'View/Model/Serializer'
         options = [structureOne, structureTwo]
-        choice = enquiries.choose('Choose a folder structure for the module: ', options)
+        choice = enquiries.choose(
+            'Choose a folder structure for the module: ', options
+        )
         try:
             os.mkdir(dirModule)
-            MakeStrucutreFolderModule(choice, dirModule, name, structures=[structureOne , structureTwo])
+            MakeStrucutreFolderModule(choice,
+                                      dirModule,
+                                      name,
+                                      structures=[structureOne, structureTwo])
         except FileExistsError:
-            MakeStrucutreFolderModule(choice, dirModule, name, structures=[structureOne , structureTwo])
+            MakeStrucutreFolderModule(choice,
+                                      dirModule,
+                                      name,
+                                      structures=[structureOne, structureTwo])
     else:
         click.echo(
             "Don't Find a App of Django with this name : {}".format(name_app)
         )
-    
 
 
 def MakeFile(dir, nameFile, ext, content):
@@ -236,7 +260,7 @@ def MakeFile(dir, nameFile, ext, content):
             f = open(dir + "/" + nameFile + ext, "w+")
             f.write(content)
             f.close()
-            click.echo(f"File Created.")
+            click.echo("File Created.")
         except IOError:
             click.echo("File not accessible")
         finally:
@@ -244,7 +268,9 @@ def MakeFile(dir, nameFile, ext, content):
     else:
         click.echo("A file with that name already exists")
 
-def MakeStrucutreFolderModule(choice : List, dir : str, name : str, structures : List ):
+
+def MakeStrucutreFolderModule(choice: List, dir: str,
+                              name: str, structures: List):
     listFolders = []
     for st in structures:
         if st == choice:
@@ -253,78 +279,149 @@ def MakeStrucutreFolderModule(choice : List, dir : str, name : str, structures :
     name_file_model = "Model" + name.capitalize()
     name_file_serializer = "Serializer" + name.capitalize()
     name_serializer = name.capitalize() + "Serializer"
+    folder_model = "Model"
+    folder_serializer = "Serializer"
+    folder_domain = "Domain"
+    folder_infractructure = "Infractruture"
     for folder in listFolders:
-        if folder == "Application": 
+        if folder == "View":
             try:
                 os.mkdir(dir + "/" + folder)
-                MakeFile(dir + "/" + folder, name_file_view , ".py", 
-                    contentClassAPiViewADI.format(
-                        name_file_model,
-                        name.capitalize(), #name of model
-                        name_file_serializer,
-                        name_serializer,
-                        name + "s",
-                        name.capitalize(),#name of model
-                        name_serializer,
-                        name + "s",
-                        name_serializer,
-                    ) # content
-                )
+                MakeFileInFolderView(dir , folder_domain,folder_infractructure, folder , name_file_view,name_file_model,name,name_file_serializer,name_serializer)
             except FileExistsError:
-                MakeFile(dir + "/" + folder, name_file_view, ".py", 
-                    contentClassAPiViewADI.format(
-                        name_file_model,
-                        name.capitalize(), #name of model
-                        name_file_serializer,
-                        name_serializer,
-                        name + "s",
-                        name.capitalize(),#name of model
-                        name_serializer,
-                        name + "s",
-                        name_serializer,
-                    ) # content
-                )
+                MakeFileInFolderView(dir , folder_domain,folder_infractructure, folder , name_file_view,name_file_model,name,name_file_serializer,name_serializer)
+        if folder == "Model":
+            try:
+                os.mkdir(dir + "/" + folder)
+                MakeFileInFolderModel(dir , folder , name_file_model , name)
+            except FileExistsError:
+                MakeFileInFolderModel(dir , folder , name_file_model , name)
+        if folder == "Serializer":
+            try:
+                os.mkdir(dir + "/" + folder)
+                MakeFileInFolderSerializer(dir, folder_domain,folder,name_file_serializer,name_file_model,name,name_serializer)
+            except FileExistsError:
+                MakeFileInFolderSerializer(dir, folder_domain,folder,name_file_serializer,name_file_model,name,name_serializer)
+        if folder == "Application":
+            try:
+                os.mkdir(dir + "/" + folder)
+                MakeFileInFolderApplication(dir, folder_domain, folder_infractructure,
+                                            folder, name_file_view,
+                                            name_file_model,
+                                            name, name_file_serializer,
+                                            name_serializer)
+            except FileExistsError:
+                MakeFileInFolderApplication(dir, folder_domain, folder_infractructure,
+                                            folder, name_file_view,
+                                            name_file_model,
+                                            name, name_file_serializer,
+                                            name_serializer)
         if folder == "Domain":
             try:
                 os.mkdir(dir + "/" + folder)
-                MakeFile(dir + "/" + folder, name_file_model, ".py", 
-                    contentClassAPiModelADI.format(
-                        name.capitalize(),
-                        name.capitalize(),
-                        name.capitalize(),
-                        
-                    ) # content
-                )
+                MakeFileInFolderDomain(dir, folder, name_file_model, name)
             except FileExistsError:
-                MakeFile(dir + "/" + folder, name_file_model, ".py", 
-                    contentClassAPiModelADI.format(
-                        name_file_model,
-                        name.capitalize(), 
-                        name_file_serializer,
-                    ) # content
-                )
-        if folder == "Infractruture":
+                MakeFileInFolderDomain(dir, folder, name_file_model, name)
+        if folder == "Infractructure":
             try:
                 os.mkdir(dir + "/" + folder)
-                MakeFile(dir + "/" + folder, name_file_serializer, ".py", 
-                    contentClassAPISerializerADI.format(
-                        name_file_model,
-                        name.capitalize(),
-                        name_serializer,
-                        name.capitalize(),
-                        
-                    ) # content
-                )
+                MakeFileInFolderInfractructure(dir,folder_domain,folder,name_file_serializer,name_file_model,name,name_serializer)
             except FileExistsError:
-                MakeFile(dir + "/" + folder, name_file_serializer, ".py", 
-                    contentClassAPISerializerADI.format(
-                        name_file_model,
-                        name.capitalize(),
-                        name_serializer,
-                        name.capitalize(),
-                    ) # content
-                )
-    pass
+                MakeFileInFolderInfractructure(dir,folder_domain,folder,name_file_serializer,name_file_model,name,name_serializer)
+    click.echo("Please Created inside of module the File for URLS")
+
+
+def MakeFileInFolderApplication(dir: str, folder_domain: str, folder_infractructure: str,
+                                folder: str, name_file_view: str,
+                                name_file_model: str, name: str,
+                                name_file_serializer: str,
+                                name_serializer: str):
+    MakeFile(dir + "/" + folder, name_file_view, ".py",
+             contentClassAPiView.format(folder_domain,
+                 name_file_model,
+                                           name.capitalize(),  # name of model
+                                           folder_infractructure,
+                                           name_file_serializer,
+                                           name_serializer,
+                                           name + "s",
+                                           name.capitalize(),  # name of model
+                                           name_serializer,
+                                           name + "s",
+                                           name_serializer,
+                                           )
+             )
+
+
+def MakeFileInFolderDomain(dir: str, folder: str,
+                           name_file_model: str, name: str):
+    MakeFile(dir + "/" + folder, name_file_model, ".py",
+             contentClassAPiModel.format(
+                     name.capitalize(),
+                     name.capitalize(),
+                     name.capitalize(),
+                     )
+             )
+
+
+def MakeFileInFolderInfractructure(dir: str, folder_domain: str,folder: str,
+                                   name_file_serializer: str,
+                                   name_file_model: str, name: str,
+                                   name_serializer: str):
+    MakeFile(dir + "/" + folder, name_file_serializer, ".py",
+             contentClassAPISerializer.format(folder_domain,
+                 name_file_model,
+                 name.capitalize(),
+                 name_serializer,
+                 name.capitalize(),
+                 )
+             )
+
+
+def MakeFileInFolderView(dir: str,folder_domain: str, folder_infractructure: str,
+                         folder: str, name_file_view: str,
+                                name_file_model: str, name: str,
+                                name_file_serializer: str,
+                                name_serializer: str):
+    MakeFile(dir + "/" + folder, name_file_view, ".py",
+             contentClassAPiView.format(folder_domain,
+                 name_file_model,
+                                           name.capitalize(),  # name of model
+                                           folder_infractructure,
+                                           name_file_serializer,
+                                           name_serializer,
+                                           name + "s",
+                                           name.capitalize(),  # name of model
+                                           name_serializer,
+                                           name + "s",
+                                           name_serializer,
+                                           )
+             )
+
+
+def MakeFileInFolderModel(dir: str, folder: str,
+                           name_file_model: str, name: str):
+    MakeFile(dir + "/" + folder, name_file_model, ".py",
+             contentClassAPiModel.format(
+                     name.capitalize(),
+                     name.capitalize(),
+                     name.capitalize(),
+                     )
+             )
+
+
+def MakeFileInFolderSerializer(dir: str, folder_domain: str,folder: str,
+                                   name_file_serializer: str,
+                                   name_file_model: str, name: str,
+                                   name_serializer: str):
+    MakeFile(dir + "/" + folder, name_file_serializer, ".py",
+             contentClassAPISerializer.format(folder_domain,
+                 name_file_model,
+                 name.capitalize(),
+                 name_serializer,
+                 name.capitalize(),
+                 )
+             )
+
 
 if __name__ == '__main__':
     main()

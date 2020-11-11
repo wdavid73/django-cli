@@ -13,7 +13,7 @@ You can use
 
 ## Usage
 
-before using any command in the package first go to your django project folder
+before using any command in the package first go to your django project folder and start your virtual environment before user the command `pip install django-cli-g73`
 
 ## Install Manually
 

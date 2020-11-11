@@ -10,7 +10,6 @@ You can use
 ## Requirements
 
 1. python 3.7+
-2. Libray CLick
 
 ## Usage
 
@@ -19,7 +18,8 @@ before using any command in the package first go to your django project folder
 ## Install Manually
 
 git clone <https://github.com/wdavid73/django-cli>
-python setup.py
+  
+run the command : `python setup.py`
 
 ## Commands local
 
@@ -27,7 +27,7 @@ python setup.py
 2. python cli/main.py make-template
 3. python cli/main.py make-model
 4. python cli/main.py make-serializer
-5. python cli/main.py make-endpoint (working progress)
+5. python cli/main.py make-endpoint
 
 ## Commands
 

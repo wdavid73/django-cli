@@ -16,7 +16,7 @@ dependency_links = [x.strip().replace('git+', '') for x in all_reqs
 
 setup(
     name="django-cli-g73",  # Replace with your own username
-    version="0.1.0",
+    version="0.1.1",
     author="Wilson Padilla",
     author_email="wdavidw26@gmail.com",
     description="This is a small project created with the initial purpose of facilitating, through a single command, the creation of views(views), templates(templates), models(models) and serializers(serializers) for the django web framework.",

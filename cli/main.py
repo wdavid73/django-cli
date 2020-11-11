@@ -17,7 +17,8 @@ import enquiries
 from pyfiglet import Figlet
 from typing import List
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
+# dir_path = os.path.dirname(os.path.realpath(__file__))
+dir_path = os.path.abspath(os.curdir)
 
 contentView = '''from django.http import HttpResponse\n
 #First View
@@ -377,10 +378,10 @@ def MakeFileInFolderDomain(dir: str, folder: str,
                            name_file_model: str, name: str):
     MakeFile(dir + "/" + folder, name_file_model, ".py",
              contentClassAPiModel.format(
-                     name.capitalize(),
-                     name.capitalize(),
-                     name.capitalize(),
-                     )
+                 name.capitalize(),
+                 name.capitalize(),
+                 name.capitalize(),
+             )
              )
 
 
@@ -423,10 +424,10 @@ def MakeFileInFolderModel(dir: str, folder: str,
                           name_file_model: str, name: str):
     MakeFile(dir + "/" + folder, name_file_model, ".py",
              contentClassAPiModel.format(
-                     name.capitalize(),
-                     name.capitalize(),
-                     name.capitalize(),
-                     )
+                 name.capitalize(),
+                 name.capitalize(),
+                 name.capitalize(),
+             )
              )
 
 

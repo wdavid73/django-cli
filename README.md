@@ -3,7 +3,7 @@
 ## Description
 
 This is a small project created with the initial purpose of facilitating, through a single command, the creation of views, templates, models, serializers and basic endpoints for the django web framework together with the django rest framework.
-You can use
+You can see in :
   
 [Django-Cli](https://github.com/wdavid73/django-cli)
   

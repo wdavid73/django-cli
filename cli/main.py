@@ -20,11 +20,43 @@ from typing import List
 # dir_path = os.path.dirname(os.path.realpath(__file__))
 dir_path = os.path.abspath(os.curdir)
 
-contentView = '''from django.http import HttpResponse\n
+contentViewDjango = '''from django.http import HttpResponse\n
 #First View
 def index(request):
     #Your Code Here..
     return HttpResponse("Hello, world!!. You are at the {} index.")
+'''
+
+contentViewDRF = '''from rest_framework import status
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.views import APIView
+# please import you model
+# please import you serialzer\n
+
+#First View
+class GetAndPost(APIView):
+    def get(self, request: Request):
+        #Your Code Here..
+        return Response(data="Hello, world!!. You are at the {} get.",status = status.HTTP_200_OK)
+            
+    def post(self, request):
+        # Your Code Here..
+        return Response(data="Hello, world!!. You are at the {} post.",status = status.HTTP_201_CREATED)
+'''
+
+contentViewDRFDecorator = '''from rest_framework import status
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+# please import you model
+# please import you serialzer
+
+#First View
+@api_view(["GET"])
+def get(request: Request):
+    #Your Code Here..
+    return Response(data = "Hello, world!!. You are at the {} get.",status = status.HTTP_200_OK)
 '''
 
 contentClassAPiView = '''from rest_framework import status
@@ -128,11 +160,19 @@ def main():
 def make_view(name, name_app):
     if os.path.isdir(name_app):
         dirViews = dir_path + '/' + name_app + "/" + "views"
+        optionDjango = "Django"
+        optionDRF = "Django Rest Framework"
+        optionDRFDec = "Django Rest Framework With Decorators"
+        options = [optionDjango, optionDRF,optionDRFDec]
+        choice = enquiries.choose(
+            'Choose a view structure for the file view: ', options
+        )
         try:
             os.mkdir(dirViews)
-            MakeFile(dirViews, name, ".py", contentView.format(name))
+            
+            MakeFileChoice(choice, dirViews, name, ".py")
         except FileExistsError:
-            MakeFile(dirViews, name, ".py", contentView.format(name))
+            MakeFileChoice(choice, dirViews, name, ".py")
     else:
         click.echo(
             "Don't Find a App of Django with this name : {}".format(name_app)
@@ -269,6 +309,16 @@ def MakeFile(dir, nameFile, ext, content):
     else:
         click.echo("A file with that name already exists")
 
+def MakeFileChoice(choice : list, dir : str, nameFile : str , ext : str):
+    if not os.path.isfile(dir + "/" + nameFile + ext):
+        if choice == "Django":
+            try_create_file(dir, nameFile,ext , contentViewDjango)
+        elif choice == "Django Rest Framework":
+            try_create_file(dir, nameFile,ext , contentViewDRF)
+        elif choice == "Django Rest Framework With Decorators":
+            try_create_file(dir, nameFile,ext , contentViewDRFDecorator)
+    else:
+        click.echo("A file with that name already exists")
 
 def MakeStrucutreFolderModule(choice: List, dir: str,
                               name: str, structures: List):
@@ -443,6 +493,18 @@ def MakeFileInFolderSerializer(dir: str, folder_model: str, folder: str,
                                               name.capitalize(),
                                               )
              )
+
+def try_create_file(dir: str , nameFile: str, ext: str, content: str):
+    try:
+        click.echo("Creating File...")
+        f = open(dir + "/" + nameFile + ext, "w+")
+        f.write(content.format(nameFile, nameFile))
+        f.close()
+        click.echo("File Created.")
+    except IOError:
+        click.echo("File not accessible")
+    finally:
+        f.close()
 
 
 if __name__ == '__main__':

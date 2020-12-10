@@ -20,6 +20,8 @@ before using any command in the package first go to your django project folder a
 ## Install Manually
 
 git clone <https://github.com/wdavid73/django-cli>
+
+enter to the folder django-cli
   
 run the command : `python setup.py`
 

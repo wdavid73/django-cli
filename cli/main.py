@@ -14,16 +14,18 @@ commands:
 import os
 import click
 import enquiries
+
 from pyfiglet import Figlet
-from typing import List
+from typing import List, final
 
 # dir_path = os.path.dirname(os.path.realpath(__file__))
 dir_path = os.path.abspath(os.curdir)
 
+
 contentViewDjango = '''from django.http import HttpResponse\n
-#First View
-def index(request):
-    #Your Code Here..
+# First View
+ def index(request):
+ # Your Code Here..
     return HttpResponse("Hello, world!!. You are at the {} index.")
 '''
 
@@ -34,12 +36,12 @@ from rest_framework.views import APIView
 # please import you model
 # please import you serialzer\n
 
-#First View
+# First View
 class GetAndPost(APIView):
     def get(self, request: Request):
-        #Your Code Here..
+        # Your Code Here..
         return Response(data="Hello, world!!. You are at the {} get.",status = status.HTTP_200_OK)
-            
+
     def post(self, request):
         # Your Code Here..
         return Response(data="Hello, world!!. You are at the {} post.",status = status.HTTP_201_CREATED)
@@ -52,10 +54,10 @@ from rest_framework.decorators import api_view
 # please import you model
 # please import you serialzer
 
-#First View
+# First View
 @api_view(["GET"])
 def get(request: Request):
-    #Your Code Here..
+    # Your Code Here..
     return Response(data = "Hello, world!!. You are at the {} get.",status = status.HTTP_200_OK)
 '''
 
@@ -143,6 +145,14 @@ class {}(models.Model):
         db_table = "{}"
 '''
 
+contentUrls = '''from django.urls import path
+from .{}.{}GetAndPost import GetAndPost
+
+urlspatterns = [
+    path("" , GetAndPost.as_view() , name="get_and_post"),
+]
+'''
+
 
 @click.group()
 def main():
@@ -163,16 +173,16 @@ def make_view(name, name_app):
         optionDjango = "Django"
         optionDRF = "Django Rest Framework"
         optionDRFDec = "Django Rest Framework With Decorators"
-        options = [optionDjango, optionDRF,optionDRFDec]
+        options = [optionDjango, optionDRF, optionDRFDec]
         choice = enquiries.choose(
             'Choose a view structure for the file view: ', options
         )
         try:
             os.mkdir(dirViews)
-            
-            MakeFileChoice(choice, dirViews, name, ".py")
+
+            MakeFileChoice(choice, dirViews, name, ".py", "view")
         except FileExistsError:
-            MakeFileChoice(choice, dirViews, name, ".py")
+            MakeFileChoice(choice, dirViews, name, ".py", "view")
     else:
         click.echo(
             "Don't Find a App of Django with this name : {}".format(name_app)
@@ -191,9 +201,9 @@ def make_template(name, name_app):
         dirTemplates = dir_path + '/' + name_app + "/" + "template"
         try:
             os.mkdir(dirTemplates)
-            MakeFile(dirTemplates, name, ".html", contentTemplate)
+            MakeFile(dirTemplates, name, ".html", contentTemplate, "template")
         except FileExistsError:
-            MakeFile(dirTemplates, name, ".html", contentTemplate)
+            MakeFile(dirTemplates, name, ".html", contentTemplate, "template")
     else:
         click.echo(
             "Don't Find a App of Django with this name : {}".format(name_app)
@@ -223,7 +233,7 @@ def make_serializer(name, name_app, name_model):
                                               name_model.capitalize(),
                                               name.capitalize(),
                                               name_model.capitalize()
-                                              )
+                                              ), "serializer"
                      )
         except FileExistsError:
             MakeFile(dirSerializers,
@@ -233,7 +243,7 @@ def make_serializer(name, name_app, name_model):
                                               name_model.capitalize(),
                                               name.capitalize(),
                                               name_model.capitalize()
-                                              )
+                                              ), "serializer"
                      )
     else:
         click.echo(
@@ -252,10 +262,10 @@ def make_model(name, name_app):
         try:
             os.mkdir(dirModels)
             MakeFile(dirModels, name, ".py",
-                     contentModel.format(name.capitalize(), name.capitalize()))
+                     contentModel.format(name.capitalize(), name.capitalize()), "model")
         except FileExistsError:
             MakeFile(dirModels, name, ".py",
-                     contentModel.format(name.capitalize(), name.capitalize()))
+                     contentModel.format(name.capitalize(), name.capitalize()), "model")
     else:
         click.echo(
             "Don't Find a App of Django with this name : {}".format(name_app)
@@ -294,31 +304,31 @@ def make_endpoint(name, name_app):
         )
 
 
-def MakeFile(dir, nameFile, ext, content):
+def MakeFile(dir: str, nameFile: str, ext: str, content: str, type: str):
     if not os.path.isfile(dir + "/" + nameFile + ext):
         try:
-            click.echo("Creating File...")
             f = open(dir + "/" + nameFile + ext, "w+")
             f.write(content)
             f.close()
-            click.echo("File Created.")
+            click.echo("File {} Created.".format(type))
         except IOError:
             click.echo("File not accessible")
-        finally:
-            f.close()
     else:
         click.echo("A file with that name already exists")
 
-def MakeFileChoice(choice : list, dir : str, nameFile : str , ext : str):
+
+def MakeFileChoice(choice: list, dir: str, nameFile: str, ext: str, type: str):
     if not os.path.isfile(dir + "/" + nameFile + ext):
         if choice == "Django":
-            try_create_file(dir, nameFile,ext , contentViewDjango)
+            try_create_file(dir, nameFile, ext, contentViewDjango, type)
         elif choice == "Django Rest Framework":
-            try_create_file(dir, nameFile,ext , contentViewDRF)
+            try_create_file(dir, nameFile, ext, contentViewDRF, type)
         elif choice == "Django Rest Framework With Decorators":
-            try_create_file(dir, nameFile,ext , contentViewDRFDecorator)
+            try_create_file(dir, nameFile, ext,
+                            contentViewDRFDecorator, type)
     else:
         click.echo("A file with that name already exists")
+
 
 def MakeStrucutreFolderModule(choice: List, dir: str,
                               name: str, structures: List):
@@ -333,9 +343,11 @@ def MakeStrucutreFolderModule(choice: List, dir: str,
     folder_model = "Model"
     folder_serializer = "Serializer"
     folder_domain = "Domain"
-    folder_infractructure = "Infractruture"
+    folder_infractructure = "Infractructure"
+
     for folder in listFolders:
         if folder == "View":
+            make_file_urls(dir, folder, name.capitalize())
             try:
                 os.mkdir(dir + "/" + folder)
                 MakeFileInFolderView(dir, folder_model, folder_serializer,
@@ -366,6 +378,7 @@ def MakeStrucutreFolderModule(choice: List, dir: str,
                                            name_file_model, name,
                                            name_serializer)
         if folder == "Application":
+            make_file_urls(dir, folder, name.capitalize())
             try:
                 os.mkdir(dir + "/" + folder)
                 MakeFileInFolderApplication(dir, folder_domain,
@@ -415,12 +428,13 @@ def MakeFileInFolderApplication(dir: str, folder_domain: str,
                                         folder_infractructure,
                                         name_file_serializer,
                                         name_serializer,
-                                        name.lower() + "s", 
+                                        name.lower() + "s",
                                         name.capitalize(),  # name of model
                                         name_serializer,
-                                        name.lower() + "s", 
+                                        name.lower() + "s",
                                         name_serializer,
-                                        )
+                                        ),
+             "Endpoint Folder Application"
              )
 
 
@@ -431,7 +445,8 @@ def MakeFileInFolderDomain(dir: str, folder: str,
                  name.capitalize(),
                  name.capitalize(),
                  name.capitalize(),
-             )
+             ),
+             "Endpoint Folder Domain"
              )
 
 
@@ -445,7 +460,8 @@ def MakeFileInFolderInfractructure(dir: str, folder_domain: str, folder: str,
                                               name.capitalize(),
                                               name_serializer,
                                               name.capitalize(),
-                                              )
+                                              ),
+             "Endpoint Folder Infractructure"
              )
 
 
@@ -466,7 +482,8 @@ def MakeFileInFolderView(dir: str, folder_model: str, folder_serializer: str,
                                         name_serializer,
                                         name.lower() + "s",
                                         name_serializer,
-                                        )
+                                        ),
+             "Endpoint Folder View"
              )
 
 
@@ -477,7 +494,8 @@ def MakeFileInFolderModel(dir: str, folder: str,
                  name.capitalize(),
                  name.capitalize(),
                  name.capitalize(),
-             )
+             ),
+             "Endpoint Folder Model"
              )
 
 
@@ -491,16 +509,30 @@ def MakeFileInFolderSerializer(dir: str, folder_model: str, folder: str,
                                               name.capitalize(),
                                               name_serializer,
                                               name.capitalize(),
-                                              )
+                                              ),
+             "Endpoint Folder Serializer"
              )
 
-def try_create_file(dir: str , nameFile: str, ext: str, content: str):
+
+def make_file_urls(dir: str, folder_name_view: str, name: str):
+    if not os.path.isfile(dir + "/" + "urls.py"):
+        try:
+            f = open(dir + "/" + "urls.py", "w+")
+            f.write(contentUrls.format(folder_name_view, name))
+            f.close()
+            click.echo("File urls created")
+        except IOError:
+            click.echo("File not accessible")
+    else:
+        click.echo("A file urls already exists")
+
+
+def try_create_file(dir: str, nameFile: str, ext: str, content: str, type: str):
     try:
-        click.echo("Creating File...")
         f = open(dir + "/" + nameFile + ext, "w+")
         f.write(content.format(nameFile, nameFile))
         f.close()
-        click.echo("File Created.")
+        click.echo("File {} Created.".format(type))
     except IOError:
         click.echo("File not accessible")
     finally:

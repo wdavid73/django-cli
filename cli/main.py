@@ -415,10 +415,10 @@ def MakeFileInFolderApplication(dir: str, folder_domain: str,
                                         folder_infractructure,
                                         name_file_serializer,
                                         name_serializer,
-                                        name + "s",
+                                        name.lower() + "s", 
                                         name.capitalize(),  # name of model
                                         name_serializer,
-                                        name + "s",
+                                        name.lower() + "s", 
                                         name_serializer,
                                         )
              )
@@ -461,10 +461,10 @@ def MakeFileInFolderView(dir: str, folder_model: str, folder_serializer: str,
                                         folder_serializer,
                                         name_file_serializer,
                                         name_serializer,
-                                        name + "s",
+                                        name.lower() + "s",
                                         name.capitalize(),  # name of model
                                         name_serializer,
-                                        name + "s",
+                                        name.lower() + "s",
                                         name_serializer,
                                         )
              )
